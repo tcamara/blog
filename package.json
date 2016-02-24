@@ -1,0 +1,21 @@
+{
+  "name": "Blog",
+  "version": "0.0.1",
+  "description": "A simple blog written in node/express for learning purposes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Camara @10ofalltrades",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tcamara/blog"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.3",
+    "jade": "^1.11.0",
+    "mysql": "^2.10.1"
+  }
+}

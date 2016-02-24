@@ -1,0 +1,13 @@
+html
+  head
+    title= title
+  body
+    h1= header
+    form(method='post' action='/post/create')
+      input(name='user' placeholder='user' value='1')
+      br
+      input(name='title' placeholder='title' value='Test Submit')
+      br
+      input(name='content' placeholder='content' value='Test Content For Submit')
+      br
+      input(type='submit')

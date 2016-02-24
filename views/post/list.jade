@@ -1,0 +1,10 @@
+html
+  head
+    title= title
+  body
+    h1= header
+    
+    ul
+      each post in posts
+        li 
+          a(href=post.href) #{post.title}

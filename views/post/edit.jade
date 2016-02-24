@@ -1,0 +1,13 @@
+html
+  head
+    title= title
+  body
+    h1= header
+    form(method='post' action='/post/#{post_id}/update')
+      input(name='user' placeholder='user' value= post_user)
+      br
+      input(name='title' placeholder='title' value= post_title)
+      br
+      input(name='content' placeholder='content' value= post_content)
+      br
+      input(type='submit')
