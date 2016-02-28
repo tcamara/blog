@@ -11,13 +11,11 @@ router.get('/new', (req, res, next) => {
 });
 
 router.post('/create', (req, res, next) => {
-	const title = req.body.title;
-	const user = req.body.user;
-	const content = req.body.content;
+	const { title, user, content } = req.body;
+	const slug = slugify(title);
+	const values = [ title, slug, user, content ];
 
-	const slug = title.replace(/ /g, '-').toLowerCase();
-
-	mysql(`INSERT INTO \`Post\` (\`title\`, \`slug\`, \`author\`, \`content\`) VALUES ('${title}', '${slug}', '${user}', '${content}')`, (results, fields) => {
+	mysql('INSERT INTO `Post` (`title`, `slug`, `author`, `content`) VALUES (?, ?, ?, ?)', values, (results, fields) => {
 		res.status(200).send('Post Created');
 	}, (error) => {
 		return next(error);
@@ -25,7 +23,7 @@ router.post('/create', (req, res, next) => {
 });
 
 router.get('/list', (req, res, next) => {
-	mysql('SELECT * FROM `Post`', (results, fields) => {
+	mysql('SELECT * FROM `Post`', [], (results, fields) => {
 		const posts = [];
 		for(var i = 0; i < results.length; i++) {
 			var href = `/post/${results[i].id}/${results[i].slug}`;
@@ -55,7 +53,7 @@ router.get('/list', (req, res, next) => {
 router.get('/:post_id/edit', (req, res, next) => {
 	const post_id = req.params.post_id;
 
-	mysql('SELECT * FROM `Post` WHERE `id` = ' + post_id, (results, fields) => {
+	mysql('SELECT * FROM `Post` WHERE `id` = ?', [ post_id ], (results, fields) => {
 		res.render('post/edit', { 
 			title: 'Editing: ' + results[0].title,
 			header: 'Editing: ' + results[0].title,
@@ -71,14 +69,12 @@ router.get('/:post_id/edit', (req, res, next) => {
 
 router.post('/:post_id/update', (req, res, next) => {
 	const post_id = req.params.post_id;
-	const title = req.body.title;
-	const user = req.body.user;
-	const content = req.body.content;
+	const { title, user, content } = req.body;
+	const slug = slugify(title);
+	const values = [ title, slug, user, content, post_id ];
 
-	const slug = title.replace(/ /g, '-').toLowerCase();
-
-	mysql(`UPDATE \`Post\` SET \`title\` = '${title}', \`slug\` = '${slug}', \`author\` = '${user}', \`content\` = '${content}' WHERE \`id\` = '${post_id}'`, (results, fields) => {
-		res.status(200).send('Post Created');
+	mysql('UPDATE `Post` SET `title` = ?, `slug` = ?, `author` = ?, `content` = ? WHERE `id` = ?', values, (results, fields) => {
+		res.status(200).send('Post Updated');
 	}, (error) => {
 		return next(error);
 	});
@@ -87,7 +83,7 @@ router.post('/:post_id/update', (req, res, next) => {
 router.post('/:post_id/delete', (req, res, next) => {
 	const post_id = req.params.post_id;
 
-	mysql('DELETE FROM `Post` WHERE `id` = ' + post_id, (results, fields) => {
+	mysql('DELETE FROM `Post` WHERE `id` = ?', [ post_id ], (results, fields) => {
 		res.status(200).send('Post Deleted');
 	}, (error) => {
 		return next(error);
@@ -97,7 +93,7 @@ router.post('/:post_id/delete', (req, res, next) => {
 router.get('/:post_id/:slug?', (req, res, next) => {
 	const post_id = req.params.post_id;
 
-	mysql('SELECT * FROM `Post` WHERE `id` = ' + post_id, (results, fields) => {
+	mysql('SELECT * FROM `Post` WHERE `id` = ?', [ post_id ], (results, fields) => {
 		res.render('index', { 
 			title: results[0].title,
 			header: results[0].title, 
@@ -106,6 +102,11 @@ router.get('/:post_id/:slug?', (req, res, next) => {
 	}, (error) => {
 		return next(error);
 	});
-});	
+});
+
+
+function slugify(title) {
+	return title.replace(/ /g, '-').toLowerCase();
+}
 
 module.exports = router;

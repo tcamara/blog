@@ -9,13 +9,13 @@ const dev_config = {
 
 const pool = mysql.createPool(dev_config);
 
-function get(query, callback, error_callback) {
+function get(query, values, callback, error_callback) {
 	pool.getConnection(function(error, connection) {
         if(error) {
         	error_callback(error);
         }
         else {
-        	connection.query(query, function(error, results, fields) {
+        	connection.query(query, values, function(error, results, fields) {
         		if(error) {
         			error_callback(error);
         		}

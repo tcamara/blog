@@ -4,7 +4,8 @@
   "description": "A simple blog written in node/express for learning purposes",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node -- index.js"
   },
   "author": "Tim Camara @10ofalltrades",
   "repository": {
@@ -17,5 +18,10 @@
     "express": "^4.13.3",
     "jade": "^1.11.0",
     "mysql": "^2.10.1"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.5.1",
+    "babel-preset-es2015": "^6.5.0"
   }
 }

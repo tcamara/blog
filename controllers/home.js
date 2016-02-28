@@ -3,11 +3,7 @@ const router = express.Router();
 const mysql = require('./../mysql.js');
 
 router.get('/', (req, res, next) => {
-	mysql('SELECT * FROM `Post`', (results, fields) => {
-		res.send('Homepage');
-	}, (error) => {
-		return next(error);
-	});
+	res.send('Homepage');
 });
 
 router.get('/about', (req, res, next) => {
