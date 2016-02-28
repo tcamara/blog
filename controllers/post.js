@@ -16,7 +16,7 @@ router.post('/create', (req, res, next) => {
 	const values = [ title, slug, user, content ];
 
 	mysql('INSERT INTO `Post` (`title`, `slug`, `author`, `content`) VALUES (?, ?, ?, ?)', values, (results, fields) => {
-		res.status(200).send('Post Created');
+		res.redirect(`/post/${results.insertId}/${slug}`);
 	}, (error) => {
 		return next(error);
 	});
@@ -43,7 +43,7 @@ router.get('/list', (req, res, next) => {
 		res.render('post/list', { 
 			title: 'Posts',
 			header: 'List Posts',
-			posts: posts
+			posts: posts,
 		});
 	}, (error) => {
 		return next(error);
@@ -74,7 +74,7 @@ router.post('/:post_id/update', (req, res, next) => {
 	const values = [ title, slug, user, content, post_id ];
 
 	mysql('UPDATE `Post` SET `title` = ?, `slug` = ?, `author` = ?, `content` = ? WHERE `id` = ?', values, (results, fields) => {
-		res.status(200).send('Post Updated');
+		res.redirect(`/post/${post_id}/${slug}`);
 	}, (error) => {
 		return next(error);
 	});
@@ -84,7 +84,7 @@ router.post('/:post_id/delete', (req, res, next) => {
 	const post_id = req.params.post_id;
 
 	mysql('DELETE FROM `Post` WHERE `id` = ?', [ post_id ], (results, fields) => {
-		res.status(200).send('Post Deleted');
+		res.redirect(`/post/list`);
 	}, (error) => {
 		return next(error);
 	});
@@ -97,7 +97,7 @@ router.get('/:post_id/:slug?', (req, res, next) => {
 		res.render('index', { 
 			title: results[0].title,
 			header: results[0].title, 
-			content: results[0].content
+			content: results[0].content,
 		});
 	}, (error) => {
 		return next(error);
